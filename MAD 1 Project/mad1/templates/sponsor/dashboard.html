@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% block content %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="{{ url_for('sponsor.dashboard') }}">Sponsor Dashboard</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('sponsor.dashboard') }}">Dashboard</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('sponsor.campaigns') }}">View Campaigns</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('sponsor.completed_campaigns') }}">Completed Campaigns</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('sponsor.create') }}">Create Campaign</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('sponsor.browse_influencers', campaign_id=1) }}">Browse Influencers</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('sponsor.edit_profile', user_id=current_user.id) }}">Edit Profile</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('auth.logout') }}">Logout</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+
+<main class="container mt-5">
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover table-striped">
+      <thead class="thead-dark">
+        <tr class="bg-brown text-white">
+          <th>Campaign Name</th>
+          <th>Campaign Budget</th>
+          <th>Campaign Visibility</th>
+          <th>Campaign Niche</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for campaign in campaigns %}
+        <tr class="bg-beige text-brown">
+          <td>{{ campaign.c_name }}</td>
+          <td>{{ campaign.budget }}</td>
+          <td>{{ campaign.c_visibility }}</td>
+          <td>{{ campaign.c_niche }}</td>
+          <td class="d-flex justify-content-around">
+            <a
+              href="{{ url_for('sponsor.edit_campaign', campaign_id=campaign.id) }}"
+              class="btn btn-sm btn-outline-primary mr-2"
+              >Edit</a
+            >
+            <form
+              action="{{ url_for('sponsor.delete_campaign', campaign_id=campaign.id) }}"
+              method="POST"
+              onsubmit="return confirm('Are you sure you want to delete this campaign?');"
+              class="d-inline"
+            >
+              <input
+                type="submit"
+                value="Delete"
+                class="btn btn-sm btn-outline-danger mr-2"
+              />
+            </form>
+            <a
+              href="{{ url_for('sponsor.view_campaign', campaign_id=campaign.id) }}"
+              class="btn btn-sm btn-outline-success"
+              >View</a
+            >
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</main>
+
+
+
+<!-- <main>
+  <div class="profile">
+    <h2>Your Profile</h2>
+    <p>Username: {{ user.name }}</p>
+    <p>Email: {{ user.email }}</p>
+    <p>User Type: {{ user.role }}</p>
+    <p>User Niche: {{ user.user_niche }}</p>
+    <a href="{{ url_for('sponsor.edit_profile', user_id=user.id) }}"
+      >Edit Profile</a
+    >
+  </div>
+
+  <div>
+    <table>
+      <caption>Received Requests</caption>
+      <thead>
+        <tr>
+          <th>Campaign Name</th>
+          <th>Influencer</th>
+          <th>Requirements</th>
+          <th>Amount</th>
+          <th>Status</th>
+          <th>Completion Done</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for request, campaign_name, influencer_name in influencer_requests %}
+        {% if request.request_status == "Pending" %}
+        <tr>
+          <td>{{ campaign_name }}</td>
+          <td>{{ influencer_name }}</td>
+          <td>{{ request.requirements }}</td>
+          <td>{{ request.amount }}</td>
+          <td>{{ request.request_status }}</td>
+          <td>{{ request.is_completion_done }}</td>
+          {% if request.request_status == "Pending" %}
+          <td> 
+            <a href="{{url_for("sponsor.accept_request_from_dashboard", request_id=request.id)}}">Accept</a> 
+            <a href="{{url_for("sponsor.reject_request", request_id=request.id)}}">Reject</a>
+          </td>
+          {% endif %}
+        </tr>
+        {% endif %}
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</main> -->
+{% endblock %}

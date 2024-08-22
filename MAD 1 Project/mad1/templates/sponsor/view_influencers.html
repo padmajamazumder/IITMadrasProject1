@@ -1,0 +1,112 @@
+{% extends 'base.html' %} {% block head %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/sponsor/browse_influencers.css') }}"
+/>
+{% endblock %} {% block content %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="{{ url_for('sponsor.dashboard') }}">Sponsor Dashboard</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('sponsor.dashboard') }}">Dashboard</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('sponsor.campaigns') }}">View Campaigns</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('sponsor.completed_campaigns') }}">Completed Campaigns</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('sponsor.create') }}">Create Campaign</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('sponsor.browse_influencers', campaign_id=campaign.id) }}">Browse Influencers</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('sponsor.edit_profile', user_id=current_user.id) }}">Edit Profile</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('auth.logout') }}">Logout</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<main>
+  <div class="search">
+    <form
+      method="POST"
+      action="{{ url_for('sponsor.browse_influencers', campaign_id=campaign.id) }}"
+    >
+      <input
+        type="text"
+        name="search"
+        placeholder="Search influencers..."
+        value="{{ search_query }}"
+      />
+      <button type="submit">Search</button>
+      {% if search_query %}
+      <button type="submit" name="viewAll" value="viewAll">View All</button>
+      {% endif %}
+    </form>
+  </div>
+
+  <div class="influencers">
+    {% for influencer in influencers %}
+    <div class="influencer">
+      <h2>{{ influencer.username }}</h2>
+      <p>Bio: {{ influencer.influencer.influencer_bio }}</p>
+      <p>Followers: {{ influencer.influencer.influencer_followers }}</p>
+      <p>Niche: {{ influencer.niche }}</p>
+      <p>Email: {{ influencer.email }}</p>
+      <a
+        href="{{ url_for('sponsor.new_request_by_sponsor', campaign_id=campaign.id, influencer_id=influencer.influencer.id) }}"
+        >Request</a
+      >
+    </div>
+
+    {% endfor %}
+  </div>
+</main>
+
+<!-- <main>
+  <div class="search">
+    <form
+      method="POST"
+      action="{{ url_for('sponsor.browse_influencers', campaign_id=campaign.id) }}"
+    >
+      <input
+        type="text"
+        name="search"
+        placeholder="Search influencers..."
+        value="{{ search_query }}"
+      />
+      <button type="submit">Search</button>
+      {% if search_query %}
+      <button type="submit" name="viewAll" value="viewAll">View All</button>
+      {% endif %}
+    </form>
+  </div>
+
+  <div class="influencers">
+    {% for influencer in influencers %}
+    <div class="influencer">
+      <h2>{{ influencer.username }}</h2>
+      <p>Bio: {{ influencer.influencer.influencer_bio }}</p>
+      <p>Followers: {{ influencer.influencer.influencer_followers }}</p>
+      <p>Niche: {{ influencer.niche }}</p>
+      <p>Email: {{ influencer.email }}</p>
+      <a
+        href="{{ url_for('sponsor.new_request_by_sponsor', campaign_id=campaign.id, influencer_id=influencer.influencer.id) }}"
+        >Request</a
+      >
+    </div>
+
+    {% endfor %}
+  </div>
+</main> -->
+{% endblock %}

@@ -1,0 +1,203 @@
+{% extends "base.html" %} {% block head %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block content %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="{{ url_for('admin.dashboard') }}">Admin</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
+    aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav ml-auto">
+
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('admin.view_campaigns') }}">View Campaigns</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('admin.view_users') }}">View Users</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('admin.flagged_users') }}">Flagged Users</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('admin.flagged_campaigns') }}">Flagged Campaigns</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('auth.logout') }}">Logout</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<section style="background-color: #f0f2f5; min-height:100vh">
+  <div class="container py-5 h-100">
+    <div class="card" style="border-radius: 15px;">
+      <div class="card-body">
+        <div class="row">
+          <!-- Statistics Section -->
+          <div class="col-md-6 mb-4">
+            <h3 class="card-title text-center">Platform Statistics</h3>
+            <div class="stats text-center">
+              <p>Total number of users: {{ no_of_users }}</p>
+              <p>Total number of campaigns: {{ no_of_campaigns }}</p>
+              <p>Total Requests Sent: {{ total_req_sent }}</p>
+              <p>Total Campaign Budget: Rs. {{ total_campaign_budget }}</p>
+            </div>
+          </div>
+
+          <!-- Graphs Section -->
+          <div class="col-md-6">
+            <div class="graphs">
+              <div class="box1 mb-4">
+                <canvas id="userChart" width="300px" height="300px"></canvas>
+                <canvas id="requestChart" width="300px" height="300px"></canvas>
+              </div>
+              <div class="box2">
+                <canvas id="campaignChart" width="300px" height="300px"></canvas>
+                <canvas id="requestsChart" width="300px" height="300px"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+
+
+
+<script>
+  var ctx = document.getElementById("userChart").getContext("2d");
+  const labels = [
+    "Total number of Sponsors",
+    "Total number of Influencers",
+  ];
+  var userChart = new Chart(ctx, {
+    type: "doughnut",
+    data: {
+      labels: labels,
+      datasets: [{
+        label: "Total ",
+        data: [
+          {{ no_of_sponsors }},
+      {{ no_of_influencers }},
+          ],
+  backgroundColor: [
+    "rgb(255, 99, 132)",
+    "rgb(54, 162, 235)",
+    "rgb(255, 205, 86)",
+  ],
+        }],
+      },
+  options: {
+    responsive: false,
+      title: {
+      display: true,
+        text: "Total Requests Sent",
+        },
+  },
+    });
+
+
+  var ctx2 = document.getElementById("requestChart").getContext("2d");
+  const labels2 = [
+    "Requests Sent By Influencers",
+    "Requests Sent By Sponsors",
+  ];
+  var requestChart = new Chart(ctx2, {
+    type: "doughnut",
+    data: {
+      labels: labels2,
+      datasets: [{
+        label: "Total ",
+        data: [
+          {{ no_of_req_sent_by_influencer }},
+      {{ no_of_req_sent_by_sponsor }},
+          ],
+  backgroundColor: [
+    "rgb(255, 99, 132)",
+    "rgb(54, 162, 235)",
+    "rgb(255, 205, 86)",
+  ],
+        }],
+      },
+  options: {
+    responsive: false,
+      title: {
+      display: true,
+        text: "Total Requests Sent",
+        },
+  },
+    });
+
+  var ctx3 = document.getElementById("campaignChart").getContext("2d");
+  const labels3 = [
+    "Completed Campaigns",
+    "Incomplete Campaigns",
+  ];
+  var campaignChart = new Chart(ctx3, {
+    type: "doughnut",
+    data: {
+      labels: labels3,
+      datasets: [{
+        label: "Total ",
+        data: [
+          {{ completed_campaigns }},
+      {{ incomplete_campaigns }},
+          ],
+  backgroundColor: [
+    "rgb(255, 99, 132)",
+    "rgb(54, 162, 235)",
+    "rgb(255, 205, 86)",
+  ],
+        }],
+      },
+  options: {
+    responsive: false,
+      title: {
+      display: true,
+        text: "Total Requests Sent",
+        },
+  },
+    });
+
+  var ctx4 = document.getElementById("requestsChart").getContext("2d");
+  const labels4 = [
+    "Completed Requests",
+    "Incomplete Requests",
+  ];
+  var requestChart = new Chart(ctx4, {
+    type: "doughnut",
+    data: {
+      labels: labels4,
+      datasets: [{
+        label: "Total ",
+        data: [
+          {{ completed_requests }},
+      {{ incomplete_requests }},
+          ],
+  backgroundColor: [
+    "rgb(255, 99, 132)",
+    "rgb(54, 162, 235)",
+    "rgb(255, 205, 86)",
+  ],
+        }],
+      },
+  options: {
+    responsive: false,
+      title: {
+      display: true,
+        text: "Total Requests Sent",
+        },
+  },
+    });
+</script>
+{% endblock %}

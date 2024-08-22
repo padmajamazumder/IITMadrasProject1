@@ -1,0 +1,71 @@
+{% extends 'base.html' %} {% block head %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/sponsor/edit_profile.css')
+}}"
+/>
+{% endblock %} {% block content %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="{{ url_for('sponsor.dashboard') }}">Sponsor Dashboard</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('sponsor.dashboard') }}">Dashboard</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('sponsor.campaigns') }}">View Campaigns</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('sponsor.completed_campaigns') }}">Completed Campaigns</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('sponsor.create') }}">Create Campaign</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('sponsor.browse_influencers', campaign_id=1) }}">Browse Influencers</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('sponsor.edit_profile', user_id=current_user.id) }}">Edit Profile</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('auth.logout') }}">Logout</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<main>
+  <form
+    method="POST"
+    action="{{ url_for('sponsor.edit_profile', user_id=user.id) }}"
+  >
+    <label for="name">Name</label>
+    <input type="text" id="name" name="name" value="{{ user.name }}" />
+    <br />
+    <label for="email">Email</label>
+    <input type="email" id="email" name="email" value="{{ user.email }}" />
+    <br />
+    <label for="user_niche">User Niche</label>
+    <select name="user_niche" id="user_niche">
+      <option value="">Please select</option>
+      <option value="Food">Food</option>
+      <option value="Lifestyle">Lifestyle</option>
+      <option value="Gaming">Gaming</option>
+      <option value="Finance and Investing">Finance and Investing</option>
+      <option value="Entertainment and Pop Culture">
+        Entertainment and Pop Culture
+      </option>
+      <option value="Tech">Tech</option>
+      <option value="Fashion and Beauty">Fashion and Beauty</option>
+      <option value="Fitness and Wellness">Fitness and Wellness</option>
+      <option value="Travel">Travel</option>
+    </select>
+    <br />
+
+    <input type="submit" value="Submit" />
+  </form>
+</main>
+{% endblock %}

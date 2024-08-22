@@ -1,0 +1,38 @@
+{% extends 'base.html' %} {% block head %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/influencer/new_req.css') }}"
+/>
+{% endblock %} {% block content %}
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="{{ url_for('influencer.dashboard') }}">Influencer Dashboard</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('influencer.active_requests') }}">Active Requests</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('influencer.view_campaigns') }}">Find Campaigns</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('auth.logout') }}">Logout</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<form method="post">
+  <label for="requirements">Requirements</label>
+  <input type="text" id="requirements" name="requirements" />
+
+  <label for="amount">Amount</label>
+  <input type="text" id="amount" name="amount" />
+
+  <button type="submit">Submit</button>
+</form>
+
+{% endblock %}

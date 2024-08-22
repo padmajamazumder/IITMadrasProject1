@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<section class="vh-100">
+  <div class="container py-5 h-100">
+    <div class="row d-flex align-items-center justify-content-center h-100">
+      <div class="col-md-8 col-lg-7 col-xl-6">
+        <img src="https://i.pinimg.com/564x/0c/11/97/0c1197b75e20be22ce2382560c66b07e.jpg"
+          class="img-fluid" alt="Phone image">
+      </div>
+      <div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
+        <form method="POST" action="/" >
+          <!-- Email input -->
+          <div data-mdb-input-init class="form-outline mb-4">
+            <input type="email" id="form1Example13" class="form-control form-control-lg" name="email" />
+            <label class="form-label" for="form1Example13">Email address</label>
+          </div>
+
+          <!-- Password input -->
+          <div data-mdb-input-init class="form-outline mb-4">
+            <input type="password" id="form1Example23" class="form-control form-control-lg" name="password" />
+            <label class="form-label" for="form1Example23">Password</label>
+          </div>
+
+          <!-- Role Selection -->
+          <div class="form-outline mb-4">
+            <label class="form-label" for="role">Role</label>
+            <select class="form-select form-select-lg" name="role" id="role" required>
+              <option value="" disabled selected>Select your role</option>
+              <option value="Admin">Admin</option>
+              <option value="Sponsor">Sponsor</option>
+              <option value="Influencer">Influencer</option>
+            </select>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-lg btn-block">Sign in</button>
+        </form>
+        <p>Don't have an account? <a href="/signup">Sign up now</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

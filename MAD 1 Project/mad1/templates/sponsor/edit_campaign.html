@@ -1,0 +1,131 @@
+{% extends 'base.html' %} {% block head %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/sponsor/create_campaign.css') }}"
+/>
+{% endblock %} {% block content %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="{{ url_for('sponsor.dashboard') }}">Sponsor Dashboard</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('sponsor.dashboard') }}">Dashboard</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('sponsor.campaigns') }}">View Campaigns</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('sponsor.completed_campaigns') }}">Completed Campaigns</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('sponsor.create') }}">Create Campaign</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('sponsor.browse_influencers', campaign_id=1) }}">Browse Influencers</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('sponsor.edit_profile', user_id=current_user.id) }}">Edit Profile</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('auth.logout') }}">Logout</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<form method="post">
+  <h2>Campaign Form</h2>
+
+  <div class="form-field-wrapper">
+    <label for="c_name">Campaign Name</label>
+    <input
+      type="text"
+      id="c_name"
+      name="c_name"
+      value="{{ campaign.c_name }}"
+    />
+  </div>
+
+  <div class="form-field-wrapper">
+    <label for="c_desc">Campaign Description</label>
+    <input
+      type="text"
+      id="c_desc"
+      name="c_desc"
+      value="{{ campaign.c_desc }}"
+    />
+  </div>
+
+  <div class="form-field-wrapper">
+    <label for="budget">Campaign Budget</label>
+    <input
+      type="number"
+      id="budget"
+      name="budget"
+      value="{{ campaign.budget }}"
+    />
+  </div>
+
+  <div class="form-field-wrapper">
+    <label for="c_visibility">Campaign Visibility</label>
+    <select id="c_visibility" name="c_visibility">
+      <option {% if campaign.c_visibility == 'Public' %} selected {% endif %} value="Public">Public</option>
+      <option {% if campaign.c_visibility == 'Private' %} selected {% endif %} value="Private">Private</option>
+    </select>
+  </div>
+
+  <div id="niche-container" class="hidden">
+    <label for="c_niche">Campaign Niche</label>
+    <select id="c_niche" name="c_niche">
+      <option hidden {% if campaign.c_niche == 'All' %} selected {% endif %} value="All">All</option>
+      <option {% if campaign.c_niche == 'Food' %} selected {% endif %} value="Food">Food</option>
+      <option {% if campaign.c_niche == 'Lifestyle' %} selected {% endif %} value="Lifestyle">Lifestyle</option>
+      <option {% if campaign.c_niche == 'Gaming' %} selected {% endif %} value="Gaming">Gaming</option>
+      <option {% if campaign.c_niche == 'Finance and Investing' %} selected {% endif %} value="Finance and Investing">Finance and Investing</option>
+      <option {% if campaign.c_niche == 'Entertainment and Pop Culture' %} selected {% endif %} value="Entertainment and Pop Culture"> Entertainment and Pop Culture</option>
+      <option {% if campaign.c_niche == 'Tech' %} selected {% endif %} value="Tech">Tech</option>
+      <option {% if campaign.c_niche == 'Fashion and Beauty' %} selected {% endif %} value="Fashion and Beauty">Fashion and Beauty</option>
+      <option {% if campaign.c_niche == 'Fitness and Wellness' %} selected {% endif %} value="Fitness and Wellness">Fitness and Wellness</option>
+      <option {% if campaign.c_niche == 'Travel' %} selected {% endif %} value="Travel">Travel</option>
+    </select>
+  </div>
+
+  <div class="form-field-wrapper">
+    <label for="c_start_date">Campaign Start Date</label>
+    <input type="date" id="c_start_date" name="c_start_date" value="{{ campaign.c_start_date.strftime('%Y-%m-%d') }}" />
+  </div>
+
+  <div class="form-field-wrapper">
+    <label for="c_end_date">Campaign End Date</label>
+    <input type="date" id="c_end_date" name="c_end_date" value="{{ campaign.c_end_date.strftime('%Y-%m-%d') }}" />
+  </div>
+
+  <div class="button-wrapper">
+    <button type="submit">Update</button>
+  </div>
+</form>
+
+<script>
+    function setNicheContainerVisibility() {
+      var nicheContainer = document.getElementById("niche-container");
+      var visibilitySelect = document.getElementById("c_visibility");
+      if (visibilitySelect.value === "Private") {
+        nicheContainer.classList.remove("hidden");
+      } else {
+        nicheContainer.classList.add("hidden");
+      }
+    }
+  
+    document.addEventListener("DOMContentLoaded", function () {
+      setNicheContainerVisibility(); // Set visibility on page load
+  
+      document.getElementById("c_visibility")
+        .addEventListener("change", setNicheContainerVisibility); // Set visibility on change
+    });
+  </script>
+  
+
+{% endblock %}

@@ -1,0 +1,196 @@
+{% extends 'base.html' %} {% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/influencer/active_req.css')
+}}" />
+{% endblock %} {% block content %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="{{ url_for('influencer.dashboard') }}">Influencer Dashboard</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
+    aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('influencer.active_requests') }}">Active Requests</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('influencer.view_campaigns') }}">Find Campaigns</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('auth.logout') }}">Logout</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<!-- <main>
+  <table>
+    <caption>
+      Active Requests
+    </caption>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Campaign</th>
+        <th>Sponsor</th>
+        <th>Amount</th>
+        <th>Requirements</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for req in req_sent_by_sponsor+req_sent_by_influencer %} {% if
+      req.request.is_completion_done == False %}
+      <tr>
+        <td>
+          {% if req in req_sent_by_sponsor %} Received {% else %} Sent {% endif
+          %}
+        </td>
+        <td>{{ req.campaign_name }}</td>
+        <td>{{ req.sponsor_name }}</td>
+        <td>{{ req.request.amount }}</td>
+        <td>{{ req.request.requirements }}</td>
+        <td>
+          {% if req in req_sent_by_sponsor %} {% if
+          req.request.is_completion_done == False %}
+          <form
+            action="{{ url_for('influencer.mark_comp_spo_req', request_id=req.request.id) }}"
+            method="post"
+            onsubmit="return confirm('Are you sure you want to mark this request as completed?')"
+          >
+            <input type="submit" value="Mark Completed" />
+          </form>
+          {% endif %} {% endif %} {% if req in req_sent_by_influencer %} {% if
+          req.request.is_completion_done == False %}
+          <form
+            action="{{ url_for('influencer.mark_comp_inf_req', request_id=req.request.id) }}"
+            method="post"
+            onsubmit="return confirm('Are you sure you want to mark this request as completed?')"
+          >
+            <input type="submit" value="Mark Completed" />
+          </form>
+          {% endif %} {% endif %}
+        </td>
+      </tr>
+      {% endif %} {% endfor %}
+    </tbody>
+  </table>
+
+  <table>
+    <caption>
+      Completed Requests
+    </caption>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Campaign</th>
+        <th>Sponsor</th>
+        <th>Amount</th>
+        <th>Requirements</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for req in req_sent_by_sponsor+req_sent_by_influencer %} {% if
+      req.request.is_completion_done == True %}
+      <tr>
+        <td>
+          {% if req in req_sent_by_sponsor %} Received {% else %} Sent {% endif
+          %}
+        </td>
+        <td>{{ req.campaign_name }}</td>
+        <td>{{ req.sponsor_name }}</td>
+        <td>{{ req.request.amount }}</td>
+        <td>{{ req.request.requirements }}</td>
+      </tr>
+      {% endif %} {% endfor %}
+    </tbody>
+  </table>
+</main> -->
+
+<main class="container mt-5">
+  <div class="mb-4">
+    <table class="table table-striped table-bordered">
+      <caption class="text-center fs-4 fw-bold">Active Requests</caption>
+      <thead class="table-dark">
+        <tr>
+          <th>Type</th>
+          <th>Campaign</th>
+          <th>Sponsor</th>
+          <th>Amount</th>
+          <th>Requirements</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for req in req_sent_by_sponsor + req_sent_by_influencer %}
+        {% if not req.request.is_completion_done %}
+        <tr>
+          <td>
+            {% if req in req_sent_by_sponsor %}
+            Received
+            {% else %}
+            Sent
+            {% endif %}
+          </td>
+          <td>{{ req.campaign_name }}</td>
+          <td>{{ req.sponsor_name }}</td>
+          <td>{{ req.request.amount }}</td>
+          <td>{{ req.request.requirements }}</td>
+          <td>
+            {% if req in req_sent_by_sponsor %}
+            <form action="{{ url_for('influencer.mark_comp_spo_req', request_id=req.request.id) }}" method="post"
+              onsubmit="return confirm('Are you sure you want to mark this request as completed?')" class="d-inline">
+              <button type="submit" class="btn btn-primary">Mark Completed</button>
+            </form>
+            {% endif %}
+            {% if req in req_sent_by_influencer %}
+            <form action="{{ url_for('influencer.mark_comp_inf_req', request_id=req.request.id) }}" method="post"
+              onsubmit="return confirm('Are you sure you want to mark this request as completed?')" class="d-inline">
+              <button type="submit" class="btn btn-primary">Mark Completed</button>
+            </form>
+            {% endif %}
+          </td>
+        </tr>
+        {% endif %}
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div>
+    <table class="table table-striped table-bordered">
+      <caption class="text-center fs-4 fw-bold">Completed Requests</caption>
+      <thead class="table-dark">
+        <tr>
+          <th>Type</th>
+          <th>Campaign</th>
+          <th>Sponsor</th>
+          <th>Amount</th>
+          <th>Requirements</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for req in req_sent_by_sponsor + req_sent_by_influencer %}
+        {% if req.request.is_completion_done %}
+        <tr>
+          <td>
+            {% if req in req_sent_by_sponsor %}
+            Received
+            {% else %}
+            Sent
+            {% endif %}
+          </td>
+          <td>{{ req.campaign_name }}</td>
+          <td>{{ req.sponsor_name }}</td>
+          <td>{{ req.request.amount }}</td>
+          <td>{{ req.request.requirements }}</td>
+        </tr>
+        {% endif %}
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</main>
+
+
+{% endblock %}

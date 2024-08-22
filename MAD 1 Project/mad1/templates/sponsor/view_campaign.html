@@ -1,0 +1,148 @@
+{% extends 'base.html' %} {% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/sponsor/view_campaign.css') }}" />
+{% endblock %} {% block content %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="{{ url_for('sponsor.dashboard') }}">Sponsor Dashboard</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('sponsor.dashboard') }}">Dashboard</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('sponsor.campaigns') }}">View Campaigns</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('sponsor.completed_campaigns') }}">Completed Campaigns</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('sponsor.create') }}">Create Campaign</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('sponsor.browse_influencers', campaign_id=1) }}">Browse Influencers</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('sponsor.edit_profile', user_id=current_user.id) }}">Edit Profile</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('auth.logout') }}">Logout</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+<main>
+  <table class="campaign_details">
+    <tr>
+      <th>Campaign Name</th>
+      <td>{{ campaign.c_name }}</td>
+    </tr>
+    <tr>
+      <th>Campaign Description</th>
+      <td>{{ campaign.c_desc }}</td>
+    </tr>
+    <tr>
+      <th>Campaign Budget</th>
+      <td>{{ campaign.budget }}</td>
+    </tr>
+    <tr>
+      <th>Campaign Visibility</th>
+      <td>{{ campaign.c_visibility }}</td>
+    </tr>
+    <tr>
+      <th>Niche</th>
+      <td>{{ campaign.c_niche }}</td>
+    </tr>
+    <tr>
+      <th>Campaign Start Date</th>
+      <td>{{ campaign.c_start_date }}</td>
+    </tr>
+    <tr>
+      <th>Campaign End Date</th>
+      <td>{{ campaign.c_end_date }}</td>
+    </tr>
+    <tr>
+      <th>Campaign Status</th>
+      <td>{{ campaign.status }}</td>
+    </tr>
+    <tr>
+      <th>Flag Status</th>
+      <td>{{ campaign.is_flagged }}</td>
+    </tr>
+    {% if campaign.status == "Incomplete" %}
+    <tr>
+      <th></th>
+      <th>
+        <a href="{{ url_for('sponsor.mark_complete', campaign_id=campaign.id) }}">Mark Completed</a>
+      </th>
+    </tr>
+    {% endif %}
+  </table>
+
+  <div class="req-tables">
+    <table class="received_req">
+      <caption>
+        Ad Requests
+      </caption>
+      <thead>
+        <tr>
+          <th>SNo.</th>
+          <th>Type</th>
+          <th>Influencer</th>
+          <th>Amount</th>
+          <th>Requirements</th>
+          <th>Status</th>
+          <th>
+            Completion <br />
+            Status
+          </th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for req in received_req+req_sent %}
+        <tr>
+          <td>{{ loop.index }}</td>
+          <td>{% if req in req_sent %} Sent {% else %} Received {% endif %}</td>
+          <td>{{ req.influencer_name }}</td>
+          <td>{{ req.request.amount }}</td>
+          <td>{{ req.request.requirements }}</td>
+          <td>{{ req.request.request_status }}</td>
+          <td>{{ req.request.is_completion_done }}</td>
+          <td class="actions">
+            {% if req in req_sent %} {% if req.request.request_status ==
+            "Pending" or req.request.request_status == "Rejected" %}
+            <form action="{{ url_for('sponsor.delete_sponsor_request', request_id=req.request.id) }}" method="post"
+              onsubmit="return confirm('Are you sure you want to delete this request?')">
+              <input type="submit" value="Delete" />
+            </form>
+            {% endif %} {% endif %} {% if req in req_sent %} {% if
+            req.request.request_status == "Pending" %}
+            <a href="{{ url_for('sponsor.edit_req_sent_by_sponsor', request_id=req.request.id) }}">Edit</a>
+            {% endif %} {% endif %} {% if req in received_req %} {% if
+            req.request.request_status == "Rejected" %}
+
+            <form action="{{ url_for('sponsor.delete_influencer_request', request_id=req.request.id) }}" method="post"
+              onsubmit="return confirm('Are you sure you want to delete this request?')">
+              <input type="submit" value="Delete" />
+            </form>
+
+            {% endif %} {% endif %} {% if req in received_req %} {% if
+            req.request.request_status == "Pending" %}
+
+            <form action="{{ url_for('sponsor.accept_request', request_id=req.request.id) }}" method="post">
+              <input type="submit" value="Accept" />
+            </form>
+            <form action="{{ url_for('sponsor.reject_request', request_id=req.request.id) }}" method="post">
+              <input type="submit" value="Reject" />
+            </form>
+            {% endif %} {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</main>
+{% endblock %}

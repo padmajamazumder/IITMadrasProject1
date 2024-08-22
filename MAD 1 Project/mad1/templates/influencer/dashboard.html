@@ -1,0 +1,212 @@
+{% extends 'base.html' %} {% block head %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/influencer/home.css')
+}}"
+/>
+{% endblock %} {% block content %} {% if not current_user.influencer %}
+<p>Please Provide Influencer Details</p>
+<form method="post">
+  <label for="name">Name</label>
+  <input type="text" id="name" name="name" />
+  <br />
+  <label for="bio">Bio</label>
+  <input type="text" id="bio" name="bio" />
+  <br />
+  <label for="followers"> Followers</label>
+  <input type="text" id="followers" name="followers" />
+
+  <input type="submit" value="Submit" />
+</form>
+{% endif %} {% if current_user.influencer %}
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="{{ url_for('influencer.dashboard') }}">Influencer Dashboard</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('influencer.active_requests') }}">Active Requests</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('influencer.view_campaigns') }}">Find Campaigns</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('auth.logout') }}">Logout</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<main class="container mt-5">
+  <div class="sent-by-sponsor mb-4">
+    <table class="table table-striped table-bordered">
+      <caption class="text-center fs-4 fw-bold">Received Requests</caption>
+      <thead class="table-dark">
+        <tr>
+          <th>Campaign</th>
+          <th>Sponsor</th>
+          <th>Amount</th>
+          <th>Requirements</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if not user.is_flagged %}
+          {% for req in req_sent_by_sponsor %}
+            {% if req.req_sent_by_sponsor.request_status == "Pending" %}
+              <tr>
+                <td>{{ req.campaign_name }}</td>
+                <td>{{ req.sponsor_name }}</td>
+                <td>{{ req.req_sent_by_sponsor.amount }}</td>
+                <td>{{ req.req_sent_by_sponsor.requirements }}</td>
+                <td>
+                  <div class="d-flex">
+                    <form
+                      action="{{ url_for('influencer.accept_request', request_id=req.req_sent_by_sponsor.id) }}"
+                      method="post"
+                    >
+                      <button type="submit" class="btn btn-success me-2">Accept</button>
+                    </form>
+                    <form
+                      action="{{ url_for('influencer.reject_request', request_id=req.req_sent_by_sponsor.id) }}"
+                      method="post"
+                    >
+                      <button type="submit" class="btn btn-danger">Reject</button>
+                    </form>
+                  </div>
+                </td>
+              </tr>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="sent-by-influencer">
+    <table class="table table-striped table-bordered">
+      <caption class="text-center fs-4 fw-bold">Sent Requests</caption>
+      <thead class="table-dark">
+        <tr>
+          <th>Campaign</th>
+          <th>Influencer</th>
+          <th>Amount</th>
+          <th>Requirements</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for req in req_sent_by_influencer %}
+          <tr>
+            <td>{{ req.campaign_name }}</td>
+            <td>{{ req.influencer_name }}</td>
+            <td>{{ req.req_sent_by_influencer.amount }}</td>
+            <td>{{ req.req_sent_by_influencer.requirements }}</td>
+            <td>{{ req.req_sent_by_influencer.request_status }}</td>
+            <td>
+              {% if req.req_sent_by_influencer.request_status == "Pending" %}
+                <a
+                  href="{{ url_for('influencer.edit_request', request_id=req.req_sent_by_influencer.id) }}"
+                  class="btn btn-warning"
+                >Edit</a>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</main>
+
+
+<!-- <main>
+  <div class="sent-by-sponsor">
+    <table>
+      <caption>
+        Received Requests
+      </caption>
+      <thead>
+        <tr>
+          <th>Campaign</th>
+          <th>Sponsor</th>
+          <th>Amount</th>
+          <th>Requirements</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if user.is_flagged == False%} {% for req_sent_by_sponsor in
+        req_sent_by_sponsor %} {% if
+        req_sent_by_sponsor.req_sent_by_sponsor.request_status == "Pending" %}
+        <tr>
+          <td>{{ req_sent_by_sponsor.campaign_name }}</td>
+          <td>{{ req_sent_by_sponsor.sponsor_name }}</td>
+          <td>{{ req_sent_by_sponsor.req_sent_by_sponsor.amount }}</td>
+          <td>{{ req_sent_by_sponsor.req_sent_by_sponsor.requirements }}</td>
+          <td>
+            <form
+              action="{{ url_for('influencer.accept_request', request_id=req_sent_by_sponsor.req_sent_by_sponsor.id) }}"
+              method="post"
+            >
+              <input type="submit" value="Accept" />
+            </form>
+            <form
+              action="{{ url_for('influencer.reject_request', request_id=req_sent_by_sponsor.req_sent_by_sponsor.id) }}"
+              method="post"
+            >
+              <input type="submit" value="Reject" />
+            </form>
+          </td>
+        </tr>
+        {% endif %} {% endfor %}{% endif %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="sent-by-influencer">
+    <table>
+      <caption>
+        Sent Requests
+      </caption>
+      <thead>
+        <tr>
+          <th>Campaign</th>
+          <th>Influencer</th>
+          <th>Amount</th>
+          <th>Requirements</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for req_sent_by_influencer in req_sent_by_influencer %}
+        <tr>
+          <td>{{ req_sent_by_influencer.campaign_name }}</td>
+          <td>{{ req_sent_by_influencer.influencer_name }}</td>
+          <td>{{ req_sent_by_influencer.req_sent_by_influencer.amount }}</td>
+          <td>
+            {{ req_sent_by_influencer.req_sent_by_influencer.requirements }}
+          </td>
+          <td>
+            {{ req_sent_by_influencer.req_sent_by_influencer.request_status }}
+          </td>
+          <td>
+            {% if req_sent_by_influencer.req_sent_by_influencer.request_status
+            == "Pending" %}
+            <a
+              href="{{ url_for('influencer.edit_request', request_id=req_sent_by_influencer.req_sent_by_influencer.id) }}"
+              >Edit</a
+            >
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</main> -->
+{% endif %} {% endblock %}

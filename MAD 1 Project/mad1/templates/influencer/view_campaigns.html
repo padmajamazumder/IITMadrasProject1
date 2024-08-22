@@ -1,0 +1,52 @@
+{% extends "base.html" %}{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/influencer/view_campaigns.css')
+}}" />
+{% endblock %} {% block content %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="{{ url_for('influencer.dashboard') }}">Influencer Dashboard</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
+    aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('influencer.active_requests') }}">Active Requests</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('influencer.view_campaigns') }}">Find Campaigns</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('auth.logout') }}">Logout</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<main>
+  <form method="POST" action="{{ url_for('influencer.view_campaigns') }}">
+    <input type="text" name="search" placeholder="Search campaigns..." value="{{ search_query }}" />
+    <button type="submit">Search</button>
+    {% if search_query %}
+    <button type="submit" name="viewAll" value="viewAll">View All</button>
+    {% endif %}
+  </form>
+
+  <div class="campaigns">
+    {% if user.is_flagged == False%} {% for campaign in campaigns %} {% if
+    campaign.c_niche == "All" or campaign.c_niche == influencer_niche %}
+    <div class="campaign">
+      <h2>{{ campaign.c_name }}</h2>
+      <p>Description: {{ campaign.c_desc }}</p>
+      <p>Budget: {{ campaign.budget }}</p>
+      <p>Start Date: {{ campaign.c_start_date }}</p>
+      <p>End Date: {{ campaign.c_end_date }}</p>
+      <p>Visibility: {{ campaign.c_visibility }}</p>
+      <p>Niche: {{ campaign.c_niche }}</p>
+      <p>Status: {{ campaign.status }}</p>
+      <a href="{{ url_for('influencer.send_request', campaign_id=campaign.id) }}">Send Request</a>
+    </div>
+    {% endif %} {% endfor %}{% endif %}
+  </div>
+</main>
+{% endblock %}

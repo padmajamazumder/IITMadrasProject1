@@ -1,0 +1,88 @@
+{% extends 'base.html' %} {% block head %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/admin/base.css') }}"
+/>
+{% endblock %} {% block content %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="{{ url_for('admin.dashboard') }}">Admin</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('admin.view_campaigns') }}">View Campaigns</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('admin.view_users') }}">View Users</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('admin.flagged_users') }}">Flagged Users</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('admin.flagged_campaigns') }}">Flagged Campaigns</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('auth.logout') }}">Logout</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+{% if users %}
+
+<section class="vh-100" style="background-color: #f0f2f5;">
+  <div class="container py-5 h-100">
+    <div class="card" style="border-radius: 15px;">
+      <div class="card-body">
+        <h3 class="card-title text-center mb-4">User Overview</h3>
+        <div class="table-responsive">
+          <table class="table table-striped table-hover">
+            <thead class="table-dark">
+              <tr>
+                <th>Sno.</th>
+                <th>User Name</th>
+                <th>User Role</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for user in users %}
+              <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ user.name }}</td>
+                <td>{{ user.role }}</td>
+                <td>
+                  <form
+                    action="{{ url_for('admin.unflag_user', user_id=user.id) }}"
+                    method="post"
+                  >
+                    <input type="submit" class="btn btn-warning btn-sm" value="Unflag User" />
+                  </form>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% else %}  
+
+<section class="vh-100" style="background-color: #f0f2f5;">
+  <div class="container py-5 h-100">
+    <div class="card" style="border-radius: 15px;">
+      <div class="card-body">
+        <h3 class="card-title text-center mb-4">No flagged users</h3>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endif %}
+
+{% endblock %}
