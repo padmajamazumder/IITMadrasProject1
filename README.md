@@ -108,7 +108,9 @@ MAD 1 Project/
 ```
 
 ---
-![DB design](C:\Users\PADMAJA\Desktop\MAD 1 project\database design.jpeg)
+![DB design]
+![image](https://github.com/user-attachments/assets/3e11baf3-6bed-4fbe-8880-18d73335910a)
+
 
 
 
@@ -118,3 +120,7 @@ MAD 1 Project/
 - **Project Report:** [View Project Report](https://drive.google.com/file/d/1BzSMl5tyHJ3SVVnLXAhQFFoNpEOXEt3n/view)
 - **Project Statement:** [View Project Statement](https://docs.google.com/document/d/e/2PACX-1vSWc_RrSIlJZamInJ6n-KZtJkcgTpp-CsaR_-Kq_U5ZwzCf-zWU8b6RmaV86KaNiJVUJ5cFadTr88VI/pub)
 - **Plagiarism Guidelines:** [View Guidelines](https://docs.google.com/document/d/e/2PACX-1vQpC1dcw3suVePh-AciGbgxETnvIJv6c1N1qwjCSfFqX1HZ_HlXjJxS8RYuUHfTjKTHRd1c7Xx6Ytw-/pub#h.ffvcnc9q6ome)
+-
+
+
+![image](https://github.com/user-attachments/assets/9fa0c1ec-733c-4763-88c9-de8cd21ce623)
